@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/CbnMarian/eComSite.git/static/css/main.a61d462b.css",
+    "main.js": "/CbnMarian/eComSite.git/static/js/main.2ac6ef42.js",
+    "index.html": "/CbnMarian/eComSite.git/index.html",
+    "main.a61d462b.css.map": "/CbnMarian/eComSite.git/static/css/main.a61d462b.css.map",
+    "main.2ac6ef42.js.map": "/CbnMarian/eComSite.git/static/js/main.2ac6ef42.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a61d462b.css",
+    "static/js/main.2ac6ef42.js"
+  ]
+}
