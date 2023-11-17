@@ -1,5 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import {
   getFirestore,
   doc,
@@ -69,5 +74,11 @@ const createUserProfileDocument = async (
   return unsubscribe; // Return the unsubscribe function
 };
 
-export { auth, firestore, signInWithGoogle, createUserProfileDocument };
+export {
+  auth,
+  firestore,
+  signInWithGoogle,
+  createUserProfileDocument,
+  createUserWithEmailAndPassword,
+};
 export default app;

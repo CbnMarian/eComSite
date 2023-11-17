@@ -27,10 +27,10 @@ class App extends React.Component {
             null,
             (userState) => {
               this.setState({ currentUser: userState.currentUser });
+              console.log(this.state);
             }
           );
 
-          // Store the unsubscribe function in the component state
           this.setState({ unsubscribeFromSnapshot: unsubscribe });
         }
 
