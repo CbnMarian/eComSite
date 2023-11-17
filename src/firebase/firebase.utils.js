@@ -12,6 +12,28 @@ const config = {
   measurementId: "G-Z9T64S05QK",
 };
 
+const createUserProfileDocument = async (userAuth, additionalData) => {
+  if (!userAuth) return;
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const snapShot = await userRef.get();
+  if (!snapShot.exists) {
+    const { displayName, email } = userAuth;
+    const creatAt = new Date();
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        creatAt,
+        ...additionalData,
+      });
+    } catch (error) {
+      console.log("error creating user", error.message);
+    }
+  }
+  return userRef;
+};
+
 const app = initializeApp(config);
 
 const auth = getAuth(app);
@@ -21,10 +43,6 @@ const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
 
 const signInWithGoogle = () => signInWithPopup(auth, provider);
-
-const createUserProfileDocument = async (userAuth, additionalData) => {
-  // Your implementation for creating a user profile document
-};
 
 export { auth, firestore, signInWithGoogle, createUserProfileDocument };
 export default app;
