@@ -1,6 +1,12 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
 
 const config = {
   apiKey: "AIzaSyCFcGLkI0g5rkjqhKpZYdNt-57z98vWpEg",
@@ -12,28 +18,6 @@ const config = {
   measurementId: "G-Z9T64S05QK",
 };
 
-const createUserProfileDocument = async (userAuth, additionalData) => {
-  if (!userAuth) return;
-
-  const userRef = firestore.doc(`users/${userAuth.uid}`);
-  const snapShot = await userRef.get();
-  if (!snapShot.exists) {
-    const { displayName, email } = userAuth;
-    const creatAt = new Date();
-    try {
-      await userRef.set({
-        displayName,
-        email,
-        creatAt,
-        ...additionalData,
-      });
-    } catch (error) {
-      console.log("error creating user", error.message);
-    }
-  }
-  return userRef;
-};
-
 const app = initializeApp(config);
 
 const auth = getAuth(app);
@@ -43,6 +27,47 @@ const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
 
 const signInWithGoogle = () => signInWithPopup(auth, provider);
+
+const createUserProfileDocument = async (
+  userAuth,
+  additionalData,
+  updateStateCallback
+) => {
+  if (!userAuth) return;
+
+  const userRef = doc(firestore, `users/${userAuth.uid}`);
+  const snapShot = await getDoc(userRef);
+
+  if (!snapShot.exists()) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+    try {
+      await setDoc(userRef, {
+        displayName,
+        email,
+        createdAt,
+        ...additionalData,
+      });
+    } catch (error) {
+      console.error("Error creating user", error.message);
+    }
+  }
+
+  // Use onSnapshot to listen to changes in the document
+  const unsubscribe = onSnapshot(userRef, (snapShot) => {
+    if (updateStateCallback && typeof updateStateCallback === "function") {
+      updateStateCallback({
+        currentUser: {
+          id: snapShot.id,
+          ...snapShot.data(),
+        },
+      });
+    }
+  });
+
+  return unsubscribe; // Return the unsubscribe function
+};
 
 export { auth, firestore, signInWithGoogle, createUserProfileDocument };
 export default app;
