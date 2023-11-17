@@ -13,6 +13,7 @@ const config = {
 };
 
 const app = initializeApp(config);
+
 const auth = getAuth(app);
 const firestore = getFirestore(app);
 
@@ -21,5 +22,9 @@ provider.setCustomParameters({ prompt: "select_account" });
 
 const signInWithGoogle = () => signInWithPopup(auth, provider);
 
-export { auth, firestore, signInWithGoogle };
+const createUserProfileDocument = async (userAuth, additionalData) => {
+  // Your implementation for creating a user profile document
+};
+
+export { auth, firestore, signInWithGoogle, createUserProfileDocument };
 export default app;
