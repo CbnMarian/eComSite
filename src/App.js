@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { setCurrentUser } from "./redux/user/user.acction";
 import "./App.css";
@@ -18,14 +18,10 @@ class App extends React.Component {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       try {
         if (userAuth) {
-          const userRef = await createUserProfileDocument(
-            userAuth,
-            null,
-            (updatedState) => {
-              console.log("Updated State:", updatedState);
-              setCurrentUser(updatedState.currentUser);
-            }
-          );
+          await createUserProfileDocument(userAuth, null, (updatedState) => {
+            console.log("Updated State:", updatedState);
+            setCurrentUser(updatedState.currentUser);
+          });
         } else {
           setCurrentUser(null);
         }
@@ -50,15 +46,28 @@ class App extends React.Component {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<ShopPage />} />
-          <Route path="/signin" element={<SignInAndSignOutPage />} />
+          <Route
+            path="/signin"
+            element={
+              this.props.currentUser ? (
+                <Navigate to="/" />
+              ) : (
+                <SignInAndSignOutPage />
+              )
+            }
+          />
         </Routes>
       </div>
     );
   }
 }
 
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
+
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
