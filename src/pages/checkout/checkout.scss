@@ -28,4 +28,22 @@
     margin-left: auto;
     font-size: 36px;
   }
+
+  /* Responsive styles */
+  @media screen and (max-width: 800px) {
+    width: 90%;
+    margin: 50px auto;
+
+    .checkout-header {
+      flex-direction: column;
+
+      .header-block {
+        width: 100%;
+
+        &:last-child {
+          width: 100%;
+        }
+      }
+    }
+  }
 }
