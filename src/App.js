@@ -9,6 +9,7 @@ import HomePage from "./pages/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
 import SignInAndSignOutPage from "./pages/sign-inand-sing-up/sign-in-signup";
 import Header from "./components/header/header.component";
+import CheckoutPage from "./pages/checkout/checkout";
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 import { selectCurrentUser } from "./redux/user/user.selector";
 
@@ -49,6 +50,7 @@ class App extends React.Component {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<ShopPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
           <Route
             path="/signin"
             element={
